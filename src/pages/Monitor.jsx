@@ -37,7 +37,6 @@ export default function Monitor({ session }) {
       .from('daily_progress')
       .select('*')
       .eq('date', today)
-      .neq('user_id', session.user.id)     // exclude admin's own row
       .order('updated_at', { ascending: false })
       .limit(1)
       .maybeSingle()
@@ -61,7 +60,7 @@ export default function Monitor({ session }) {
         'postgres_changes',
         { event: '*', schema: 'public', table: 'daily_progress', filter: `date=eq.${today}` },
         (payload) => {
-          if (payload.new && payload.new.user_id !== session.user.id) {
+          if (payload.new) {
             setProgressData(payload.new)
             setLastUpdated(new Date())
           }
