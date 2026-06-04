@@ -33,7 +33,7 @@ export default function Monitor({ session }) {
   // -- Fetch latest user progress --
   async function fetchProgress() {
     setLoading(true)
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('daily_progress')
       .select('*')
       .eq('date', today)
